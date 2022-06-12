@@ -1,0 +1,10 @@
+.main-module{
+    margin: 5px;
+    padding: 2px;
+    border-radius: 4px;
+}
+.child-module {
+    margin: 2px;
+    padding: 5px;
+    border-radius: 4px;
+}
