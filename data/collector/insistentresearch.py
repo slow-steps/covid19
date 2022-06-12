@@ -1,12 +1,18 @@
 """ 何回も情報取得 """
 
+from importlib.resources import path
 import time
+import datetime
+import subprocess
+from pathlib import Path
 
 import releasemark
 import datacollector
 
 INTERVAL_MINUTES = 5
 REMAIN_SECONDS = 10
+
+GIT_BATCH = Path(__file__).parent.joinpath("git.bat")
 
 def main():
     """ main """
@@ -23,6 +29,9 @@ def main():
                 for report in datacollector.collect_new_data_with_report():
                     print(report)
                 if releasemark.is_today_marked():
+                    print("github に更新をアップロードします...")
+                    subprocess.call(str(GIT_BATCH), shell=True)
+                    print("github の更新が完了しました。")
                     break
                 print(f"{INTERVAL_MINUTES}分 待機します...")
                 time.sleep(INTERVAL_MINUTES * 60)
