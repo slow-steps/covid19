@@ -47,7 +47,7 @@ function naviBar(settings) {
 }
 let buttonMap = {};
 const selectedButton = "btn-floating orange darken-1 child-module";
-const deselectedButton = "btn-floating orange lighten-3 orange-text text-darken-3 child-module";
+const deselectedButton = "btn-floating orange lighten-3 orange-text text-darken-4 child-module";
 function naviButton(label, callback) {
   const button = $("<Button>", {
     "class" : deselectedButton,
