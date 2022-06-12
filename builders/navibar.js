@@ -44,18 +44,33 @@ function naviBar(settings) {
   }
   bar.append($("<div>", { css : { "clear" : "both" } }))
   return bar;
-} 
+}
+let buttonMap = {};
+const selectedButton = "btn-floating orange darken-1 child-module";
+const deselectedButton = "btn-floating orange lighten-3 orange-text text-darken-3 child-module";
 function naviButton(label, callback) {
-  return $("<Button>")
-    .attr({
-      "class" : "btn-floating orange darken-1 child-module",
-    })
-    .css({
+  const button = $("<Button>", {
+    "class" : deselectedButton,
+    css : {
       "float" : "left",
       "width" : "auto",
       "margin" : "4px 10px",
       "padding" : "0px 10px",
+    },
+    text : label,
+  })
+  .on("click", () =>
+  {
+    callback();
+    setIndicatorColor(label);
+  }); 
+  buttonMap[label] = button;
+  return button;
+}
+function setIndicatorColor(targetLabel) {
+  for (let label in buttonMap) {
+    buttonMap[label].attr({
+      "class" : label == targetLabel ? selectedButton : deselectedButton,
     })
-    .text(label)
-    .on("click", callback);
+  }
 }
