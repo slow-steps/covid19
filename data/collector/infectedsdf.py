@@ -57,6 +57,10 @@ def select_takada_infecteds(infecteds_df):
     return infecteds_df.query(
         "居住地 == '豊後高田市'"
     )
+def select_himeshima_infecteds(infecteds_df):
+    return infecteds_df.query(
+        "居住地 == '姫島村'"
+    )
 def select_kunisaki_infecteds(infecteds_df):
     return infecteds_df.query(
         "居住地 == '国東市'"

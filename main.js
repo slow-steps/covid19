@@ -14,6 +14,7 @@ $(() => {
     "comments" : "data/comments7days.json",
     "infecteds" : "data/infecteds7days.json",
     "takada" : "data/takada.json",
+    "himeshima" : "data/himeshima.json",
     "kunisaki" : "data/kunisaki.json",
     "kitsuki" : "data/kitsuki.json",
   });
@@ -28,6 +29,7 @@ $(() => {
   const comments = new oitaComments.OitaComments(data);
   const infecteds = new covidInfecteds.OitaInfecteds(data);
   const takada = new covidInfecteds.TakadaInfecteds(data);
+  const himeshima = new covidInfecteds.HimeshimaInfecteds(data);
   const kunisaki = new covidInfecteds.KunisakiInfecteds(data);
   const kitsuki = new covidInfecteds.KitsukiInfecteds(data);
   const download = new covidDownload.CovidDownload();
@@ -37,7 +39,8 @@ $(() => {
   const contentChanger = new covidContentChanger.CovidContentChanger(
     () => comments.refreshView(contentRegion), 
     () => infecteds.refreshView(contentRegion),
-    () => takada.refreshView(contentRegion), 
+    () => takada.refreshView(contentRegion),
+    () => himeshima.refreshView(contentRegion),
     () => kunisaki.refreshView(contentRegion),
     () => kitsuki.refreshView(contentRegion),
     () => download.refreshView(contentRegion));

@@ -20,14 +20,19 @@ function naviBarContents(changer) {
       "label" : "県陽性者（1週間）",
       "callback" : () => changer.showInfecteds(),
     },
+    // {
+    //   "label" : "髙田",
+    //   "callback" : () => changer.showTakada(),
+    // },
     {
-      "label" : "髙田",
-      "callback" : () => changer.showTakada(),
+      "label" : "姫島",
+      "callback" : () => changer.showHimeshima(),
     },
     {
       "label" : "国東",
       "callback" : () => changer.showKunisaki(),
-    },    {
+    },    
+    {
       "label" : "杵築",
       "callback" : () => changer.showKitsuki(),
     },

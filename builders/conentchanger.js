@@ -2,13 +2,15 @@ export class CovidContentChanger {
   #commentsShower;
   #infectedsShower;
   #takadaShower;
+  #himeshimaShower;
   #kunisakiShower;
   #kitsukiShower;
   #downloadShower;
-  constructor(commentShower , infectedsShower, takadaShower, kunisakiShower, kitsukiShower, downloadShower) {
+  constructor(commentShower , infectedsShower, takadaShower, himeshimaShower, kunisakiShower, kitsukiShower, downloadShower) {
     this.#commentsShower = commentShower;
     this.#infectedsShower = infectedsShower;
     this.#takadaShower = takadaShower;
+    this.#himeshimaShower = himeshimaShower;
     this.#kunisakiShower = kunisakiShower;
     this.#kitsukiShower = kitsukiShower;
     this.#downloadShower = downloadShower;
@@ -21,6 +23,9 @@ export class CovidContentChanger {
   }
   showTakada() {
     this.#takadaShower();
+  }
+  showHimeshima() {
+    this.#himeshimaShower();
   }
   showKunisaki() {
     this.#kunisakiShower();

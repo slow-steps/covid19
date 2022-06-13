@@ -2,7 +2,6 @@
 
 from datetime import datetime
 from pathlib import Path
-from h11 import Data
 import requests
 
 from covidoitapage import CovidOitaPage
@@ -11,16 +10,19 @@ import infectedsdf
 import releasemark
 
 DATA_DIRECTORY = Path(__file__).parent.parent
+def get_path(file_name):
+    return DATA_DIRECTORY.joinpath(file_name)
 
-COMMENTS_CSV_PATH = DATA_DIRECTORY.joinpath("comments.csv")
-INFECTEDS_CSV_PATH = DATA_DIRECTORY.joinpath("infecteds.csv")
+COMMENTS_CSV_PATH = get_path("comments.csv")
+INFECTEDS_CSV_PATH = get_path("infecteds.csv")
 
-COMMENTS_7DAYS_JSON_PATH = DATA_DIRECTORY.joinpath("comments7days.json")
-INFECTEDS_7DAYS_JSON_PATH = DATA_DIRECTORY.joinpath("infecteds7days.json")
-TAKADA_JSON_PATH = DATA_DIRECTORY.joinpath("takada.json")
-KUNISAKI_JSON_PATH = DATA_DIRECTORY.joinpath("kunisaki.json")
-KITSUKI_JSON_PATH = DATA_DIRECTORY.joinpath("kitsuki.json")
-INFECTEDS_PDF_PATH = DATA_DIRECTORY.joinpath("infecteds.pdf")
+COMMENTS_7DAYS_JSON_PATH = get_path("comments7days.json")
+INFECTEDS_7DAYS_JSON_PATH = get_path("infecteds7days.json")
+TAKADA_JSON_PATH = get_path("takada.json")
+HIMESHIMA_JSON_PATH = get_path("himeshima.json")
+KUNISAKI_JSON_PATH = get_path("kunisaki.json")
+KITSUKI_JSON_PATH = get_path("kitsuki.json")
+INFECTEDS_PDF_PATH = get_path("infecteds.pdf")
 
 COMMENTS_RENAME_COLUMNS = {
     "更新日時" : "releaseDate",
@@ -69,8 +71,10 @@ def collect_comment(oita_page):
         comment_text=oita_page.comment
     )
     yield "コメントのリストに最新コメントを追加しました。"
+
     comments_df.to_csv(COMMENTS_CSV_PATH, index=False, encoding="utf_8_sig")
     yield "コメントのリストをCSVに保存しました。"
+
     comments7days_df = commentsdf.select_last7days_comments(comments_df)
     save_df_as_json(
         json_path=COMMENTS_7DAYS_JSON_PATH,
@@ -85,8 +89,10 @@ def collect_infecteds():
         pdf_path= INFECTEDS_PDF_PATH
     )
     yield "陽性者リストをデータとして読み込みました。"
+
     infecteds_df.to_csv(INFECTEDS_CSV_PATH, index=False, encoding="utf_8_sig")
     yield "陽性者リストをCSVに保存しました。"
+
     infected7days_df = infectedsdf.select_last7days_infecteds(infecteds_df)
     save_df_as_json(
         json_path=INFECTEDS_7DAYS_JSON_PATH,
@@ -94,12 +100,19 @@ def collect_infecteds():
         rename_columns=INFECTEDS_RENAME_COLULMNS
     )
     yield "陽性者リスト（7日分）をJSONに保存しました。"
+
     takada_df = infectedsdf.select_takada_infecteds(infecteds_df)
-    save_local_df_as_json(TAKADA_JSON_PATH, takada_df)
+    save_local_df_as_json(TAKADA_JSON_PATH,takada_df)
     yield "陽性者リスト（髙田）をJSONに保存しました。"
+
+    himeshima_df = infectedsdf.select_himeshima_infecteds(infecteds_df)
+    save_local_df_as_json(HIMESHIMA_JSON_PATH, himeshima_df)
+    yield "陽性者リスト（姫島）をJSONに保存しました。"
+
     kunisaki_df = infectedsdf.select_kunisaki_infecteds(infecteds_df)
     save_local_df_as_json(KUNISAKI_JSON_PATH, kunisaki_df)
     yield "陽性者リスト（国東）をJSONに保存しました。"
+
     kitsuki_df = infectedsdf.select_kitsuki_infecteds(infecteds_df)
     save_local_df_as_json(KITSUKI_JSON_PATH, kitsuki_df)
     yield "陽性者リスト（杵築）をJSONに保存しました。"

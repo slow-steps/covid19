@@ -23,7 +23,20 @@ export class TakadaInfecteds {
       region.append(infectedsTable(takada));
     });
   }  
-}export class KunisakiInfecteds {
+}
+export class HimeshimaInfecteds {
+  #covidData;
+  constructor(covidData) {
+    this.#covidData = covidData;
+  }
+  refreshView(region) {
+    region.empty();
+    this.#covidData.handleHimeshima(himeshima => {
+      region.append(infectedsTable(himeshima));
+    });
+  }  
+}
+export class KunisakiInfecteds {
   #covidData;
   constructor(covidData) {
     this.#covidData = covidData;
