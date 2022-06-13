@@ -2,7 +2,9 @@ export class CovidData {
   #getUrl;
   #comments = null;
   #infecteds = null;
+  #takada = null;
   #kunisaki = null;
+  #kitsuki = null;
   constructor(jsonUrlDict) {
     this.#getUrl = key => 
       jsonUrlDict[key] + "?" + new Date().getTime();
@@ -32,7 +34,18 @@ export class CovidData {
       }
     });
   }
-  get kunisakiPromise() {
+  get takadaPromise() {
+    return new Promise(resolve => {
+      if (this.#takada == null) {
+        $.getJSON(this.#getUrl("takada"), data =>{
+          this.#takada = data;
+          resolve(this.#takada);
+        });
+      } else {
+        resolve(this.#takada);
+      }
+    });
+  }  get kunisakiPromise() {
     return new Promise(resolve => {
       if (this.#kunisaki == null) {
         $.getJSON(this.#getUrl("kunisaki"), data =>{
@@ -43,6 +56,17 @@ export class CovidData {
         resolve(this.#kunisaki);
       }
     });
+  }  get kitsukiPromise() {
+    return new Promise(resolve => {
+      if (this.#kitsuki == null) {
+        $.getJSON(this.#getUrl("kitsuki"), data =>{
+          this.#kitsuki = data;
+          resolve(this.#kitsuki);
+        });
+      } else {
+        resolve(this.#kitsuki);
+      }
+    });
   }
   handleComments(commentsHandler) {
     return this.commentsPromise.then(commentsHandler);
@@ -50,8 +74,14 @@ export class CovidData {
   handleInfecteds(infetedsHandler) {
     return this.infectedsPromise.then(infetedsHandler);
   }
+  handleTakada(takadaHandler) {
+    return this.takadaPromise.then(takadaHandler);
+  }
   handleKunisaki(kunisakiHandler) {
     return this.kunisakiPromise.then(kunisakiHandler);
-  } 
+  }
+  handleKitsuki(kitsukiHandler) {
+    return this.kitsukiPromise.then(kitsukiHandler);
+  }  
 }
 

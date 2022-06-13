@@ -12,7 +12,18 @@ export class OitaInfecteds {
     });
   }
 }
-export class KunisakiInfecteds {
+export class TakadaInfecteds {
+  #covidData;
+  constructor(covidData) {
+    this.#covidData = covidData;
+  }
+  refreshView(region) {
+    region.empty();
+    this.#covidData.handleTakada(takada => {
+      region.append(infectedsTable(takada));
+    });
+  }  
+}export class KunisakiInfecteds {
   #covidData;
   constructor(covidData) {
     this.#covidData = covidData;
@@ -21,6 +32,18 @@ export class KunisakiInfecteds {
     region.empty();
     this.#covidData.handleKunisaki(kunisaki => {
       region.append(infectedsTable(kunisaki));
+    });
+  }  
+}
+export class KitsukiInfecteds {
+  #covidData;
+  constructor(covidData) {
+    this.#covidData = covidData;
+  }
+  refreshView(region) {
+    region.empty();
+    this.#covidData.handleKitsuki(kitsuki => {
+      region.append(infectedsTable(kitsuki));
     });
   }  
 }

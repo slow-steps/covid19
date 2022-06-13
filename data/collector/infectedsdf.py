@@ -53,9 +53,17 @@ def get_table_in_pdf(pdf_path):
     fix_release_date(table)
     return table
 
+def select_takada_infecteds(infecteds_df):
+    return infecteds_df.query(
+        "居住地 == '豊後高田市'"
+    )
 def select_kunisaki_infecteds(infecteds_df):
     return infecteds_df.query(
         "居住地 == '国東市'"
+    )
+def select_kitsuki_infecteds(infecteds_df):
+    return infecteds_df.query(
+        "居住地 == '杵築市'"
     )
 
 def select_last7days_infecteds(infecteds_df):

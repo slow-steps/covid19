@@ -13,7 +13,9 @@ $(() => {
   const data = new covidData.CovidData({
     "comments" : "data/comments7days.json",
     "infecteds" : "data/infecteds7days.json",
+    "takada" : "data/takada.json",
     "kunisaki" : "data/kunisaki.json",
+    "kitsuki" : "data/kitsuki.json",
   });
   document.title = title;
   
@@ -25,15 +27,19 @@ $(() => {
 
   const comments = new oitaComments.OitaComments(data);
   const infecteds = new covidInfecteds.OitaInfecteds(data);
+  const takada = new covidInfecteds.TakadaInfecteds(data);
   const kunisaki = new covidInfecteds.KunisakiInfecteds(data);
+  const kitsuki = new covidInfecteds.KitsukiInfecteds(data);
   const download = new covidDownload.CovidDownload();
 
   const contentRegion = $("#pageContent");
 
   const contentChanger = new covidContentChanger.CovidContentChanger(
     () => comments.refreshView(contentRegion), 
-    () => infecteds.refreshView(contentRegion), 
+    () => infecteds.refreshView(contentRegion),
+    () => takada.refreshView(contentRegion), 
     () => kunisaki.refreshView(contentRegion),
+    () => kitsuki.refreshView(contentRegion),
     () => download.refreshView(contentRegion));
 
   const naviBar = new covidNaviBar.CovidNaviBar(contentChanger);

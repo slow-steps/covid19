@@ -17,12 +17,19 @@ function naviBarContents(changer) {
       "callback" : () => changer.showComments(),
     },
     {
-      "label" : "陽性者リスト（1週間）",
+      "label" : "県陽性者（1週間）",
       "callback" : () => changer.showInfecteds(),
     },
     {
-      "label" : "陽性者リスト（国東）",
+      "label" : "髙田",
+      "callback" : () => changer.showTakada(),
+    },
+    {
+      "label" : "国東",
       "callback" : () => changer.showKunisaki(),
+    },    {
+      "label" : "杵築",
+      "callback" : () => changer.showKitsuki(),
     },
     {
       "label" : "ダウンロード",
