@@ -68,17 +68,31 @@ function countMembers(infecteds, latestDate) {
   const dateCriteria = covidDateTime
     .getTimelessDate(latestDate)
     .toISOString();        
-  const oita = Enumerable
-    .from(infecteds)
-    .count(x => 
-      x.releaseDate == dateCriteria);    
-  const kunisaki = Enumerable
-    .from(infecteds)
-    .count(x => 
-      x.releaseDate == dateCriteria && x.residence === "国東市");
+  let oita = 0;
+  let himeshima = 0;
+  let kunisaki = 0;
+  let kitsuki = 0;
+  for (let infected of infecteds) {
+    if (infected.releaseDate == dateCriteria) {
+      oita++;
+      switch (infected.redidence) {
+        case "姫島村":
+          himeshima++;
+          break;
+        case "国東市":
+          kunisaki++;
+          break;
+        case "杵築市":
+          kitsuki++;
+          break;
+      }
+    }
+  }
   return {
     "oita" : oita,
+    "himeshima" : himeshima,
     "kunisaki" : kunisaki,
+    "kitsuki" : kitsuki,
   };
 }
 function countsIndicator(countMembers) {
@@ -102,7 +116,9 @@ function countsIndicator(countMembers) {
         })
       )
       .append(countElement("県", countMembers["oita"]))
-      .append(countElement("国東", countMembers["kunisaki"])))
+      .append(countElement("姫島", countMembers["himeshima"]))
+      .append(countElement("国東", countMembers["kunisaki"]))
+      .append(countElement("杵築", countMembers["kitsuki"])))
     .append(floatReseter());
 }
 function floatReseter() {

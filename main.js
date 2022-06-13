@@ -7,7 +7,7 @@ import * as covidDownload from "./builders/download.js";
 import * as covidContentChanger from "./builders/conentchanger.js";
 import * as covidNaviBar from "./builders/navibar.js";
 
-const title = "大分県コロナ情報取得ページ ";
+const title = "大分県コロナ情報取得ページ（姫島・国東・杵築版）";
 
 $(() => {
   const data = new covidData.CovidData({
