@@ -71,7 +71,7 @@ def select_kitsuki_infecteds(infecteds_df):
     )
 
 def select_last7days_infecteds(infecteds_df):
-    begin_date = datetime.date.today() - datetime.timedelta(days=6)
+    begin_date = datetime.date.today() - datetime.timedelta(days=7)
     return infecteds_df.query(
         "公表日 >= @begin_date",
         engine="numexpr"

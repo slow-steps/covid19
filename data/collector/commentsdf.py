@@ -23,7 +23,7 @@ def make_latest_comments_table(csv_path, comment_datetime, comment_text):
     return latest_df
  
 def select_last7days_comments(comments_df):
-    begin_date = datetime.datetime.today() - datetime.timedelta(6)
+    begin_date = datetime.datetime.today() - datetime.timedelta(7)
     return comments_df.query(
         '更新日時 >= @begin_date',
         engine="numexpr"
