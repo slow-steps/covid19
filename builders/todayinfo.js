@@ -37,11 +37,6 @@ export class CovidTodayInfo {
     });
   }
 }
-function overview(commentDate, commentBody) {
-  return $("<div>")
-    .append(commentTitle(commentDate))
-    .append(commentMain(commentBody))
-}
 function commentTitle(commentDate) {
   return $("<h6>", {
     "class" : "orange-text text-darken-3",
