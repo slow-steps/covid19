@@ -5,10 +5,11 @@ import * as covidDate from "./coviddatetime.js";
 
 export class OitaComments extends TableBuilder{
   constructor(covidData) {
-    super(x => covidData.handleComments(x), commentsGrid);
+    super(x => covidData.commentsPromise.then(x), commentsGrid);
   }
 }
-function commentsGrid(data) {
+
+const commentsGrid = data => {
   return new Grid({
     columns: [
       {

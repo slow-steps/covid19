@@ -5,7 +5,7 @@ export class CovidFooter {
   }
   refreshView(region) {
     region.empty();
-    this.#covidData.handleUpdatedTime(updatedTime => {
+    this.#covidData.updatedTimePromise.then(updatedTime => {
       region.append($("<p>", {
         css : {
           "text-align" : "right",

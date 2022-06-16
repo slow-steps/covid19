@@ -4,34 +4,34 @@ import { TableBuilder } from "./tablebuilder.js";
 
 export class OitaInfecteds extends TableBuilder {
   constructor(covidData) {
-    super(x => covidData.handleInfecteds(x), infectesGrid);
+    super(x => covidData.infectedsPromise.then(x), infectesGrid);
   }
 }
 
 export class TakadaInfecteds extends TableBuilder {
   constructor(covidData) {
-    super(x => covidData.handleTakada(x), infectesGrid);
+    super(x => covidData.takadaPromise.then(x), infectesGrid);
   }
 }
 
 export class HimeshimaInfecteds extends TableBuilder {
   constructor(covidData) {
-    super(x => covidData.handleHimeshima(x), infectesGrid);
+    super(x => covidData.himeshimaPromise.then(x), infectesGrid);
   }
 }
 export class KunisakiInfecteds extends TableBuilder {
   constructor(covidData) {
-    super(x => covidData.handleKunisaki(x), infectesGrid);
+    super(x => covidData.kunisakiPromise.then(x), infectesGrid);
   }
 }
 
 export class KitsukiInfecteds extends TableBuilder {
   constructor(covidData) {
-    super(x => covidData.handleKitsuki(x), infectesGrid);
+    super(x => covidData.kitsukiPromise.then(x), infectesGrid);
   }
 }
 
-function infectesGrid(data) {
+const infectesGrid = data => {
   return new Grid({
     columns: [
       "NO", 

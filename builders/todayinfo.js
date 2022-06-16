@@ -13,7 +13,7 @@ export class CovidTodayInfo {
       "class" : "orange lighten-3 main-module",
     });
 
-    this.#covidData.handleComments(comments  => {
+    this.#covidData.commentsPromise.then(comments  => {
       const latestComment = Enumerable
         .from(comments)
         .orderByDescending(x => new Date(x.releaseDate))
@@ -25,7 +25,7 @@ export class CovidTodayInfo {
         .append(commentTitle(latestDate))
         .append(commentMain(latestComment.commentBody));      
       
-      this.#covidData.handleInfecteds(infecteds =>{
+      this.#covidData.infectedsPromise.then(infecteds =>{
         div.append(
           countsIndicator(countMembers(
             infecteds,

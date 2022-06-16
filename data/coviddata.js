@@ -83,7 +83,7 @@ export class CovidData {
       }
     });
   }
-  get UpdatedTimePromise() {
+  get updatedTimePromise() {
     return new Promise(resolve => {
       if (this.#kitsuki == null) {
         $.getJSON(this.#getUrl("updated"), data =>{
@@ -94,27 +94,6 @@ export class CovidData {
         resolve(this.#updatedTime);
       }
     });   
-  }
-  handleComments(handler) {
-    return this.commentsPromise.then(handler);
-  }
-  handleInfecteds(handler) {
-    return this.infectedsPromise.then(handler);
-  }
-  handleTakada(handler) {
-    return this.takadaPromise.then(handler);
-  }
-  handleHimeshima(handler) {
-    return this.himeshimaPromise.then(handler);
-  }
-  handleKunisaki(handler) {
-    return this.kunisakiPromise.then(handler);
-  }
-  handleKitsuki(handler) {
-    return this.kitsukiPromise.then(handler);
-  }
-  handleUpdatedTime(handler) {
-    return this.UpdatedTimePromise.then(handler);
   }
 }
 
