@@ -3,6 +3,7 @@
 from datetime import datetime
 from pathlib import Path
 import requests
+import json
 
 from covidoitapage import CovidOitaPage
 import commentsdf
@@ -22,6 +23,8 @@ TAKADA_JSON_PATH = get_path("takada.json")
 HIMESHIMA_JSON_PATH = get_path("himeshima.json")
 KUNISAKI_JSON_PATH = get_path("kunisaki.json")
 KITSUKI_JSON_PATH = get_path("kitsuki.json")
+UPDATE_JSON_PATH = get_path("update.json")
+
 INFECTEDS_PDF_PATH = get_path("infecteds.pdf")
 
 COMMENTS_RENAME_COLUMNS = {
@@ -117,6 +120,14 @@ def collect_infecteds():
     save_local_df_as_json(KITSUKI_JSON_PATH, kitsuki_df)
     yield "陽性者リスト（杵築）をJSONに保存しました。"
 
+def save_update_time():
+    """ write update time to json """
+    data = {
+        "updated" : datetime.now().strftime(releasemark.MARK_FORMAT),
+    }
+    with open(UPDATE_JSON_PATH, "w") as update_json:
+        json.dump(data, update_json)
+
 def collect_new_data_with_report():
     """ check oita page and collect data if it is new """
     oita_page = CovidOitaPage()
@@ -140,6 +151,8 @@ def collect_new_data_with_report():
     yield "陽性者リストの保存が完了しました。"
 
     releasemark.update_mark(oita_page.release_datetime)
+
+    save_update_time()
 
     yield "更新の取得が完了しました。"
 

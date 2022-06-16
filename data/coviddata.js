@@ -6,6 +6,7 @@ export class CovidData {
   #himeshima = null;
   #kunisaki = null;
   #kitsuki = null;
+  #updatedTime = null;
   constructor(jsonUrlDict) {
     this.#getUrl = key => 
       jsonUrlDict[key] + "?" + new Date().getTime();
@@ -82,23 +83,38 @@ export class CovidData {
       }
     });
   }
-  handleComments(commentsHandler) {
-    return this.commentsPromise.then(commentsHandler);
+  get UpdatedTimePromise() {
+    return new Promise(resolve => {
+      if (this.#kitsuki == null) {
+        $.getJSON(this.#getUrl("updated"), data =>{
+          this.#updatedTime = data["updated"];
+          resolve(this.#updatedTime);
+        });
+      } else {
+        resolve(this.#updatedTime);
+      }
+    });   
   }
-  handleInfecteds(infetedsHandler) {
-    return this.infectedsPromise.then(infetedsHandler);
+  handleComments(handler) {
+    return this.commentsPromise.then(handler);
   }
-  handleTakada(takadaHandler) {
-    return this.takadaPromise.then(takadaHandler);
+  handleInfecteds(handler) {
+    return this.infectedsPromise.then(handler);
   }
-  handleHimeshima(himeshimaHandler) {
-    return this.himeshimaPromise.then(himeshimaHandler);
+  handleTakada(handler) {
+    return this.takadaPromise.then(handler);
   }
-  handleKunisaki(kunisakiHandler) {
-    return this.kunisakiPromise.then(kunisakiHandler);
+  handleHimeshima(handler) {
+    return this.himeshimaPromise.then(handler);
   }
-  handleKitsuki(kitsukiHandler) {
-    return this.kitsukiPromise.then(kitsukiHandler);
-  }  
+  handleKunisaki(handler) {
+    return this.kunisakiPromise.then(handler);
+  }
+  handleKitsuki(handler) {
+    return this.kitsukiPromise.then(handler);
+  }
+  handleUpdatedTime(handler) {
+    return this.UpdatedTimePromise.then(handler);
+  }
 }
 

@@ -6,6 +6,7 @@ import * as covidInfecteds from "./builders/infecteds.js";
 import * as covidDownload from "./builders/download.js";
 import * as covidContentChanger from "./builders/conentchanger.js";
 import * as covidNaviBar from "./builders/navibar.js";
+import * as covidFooter from "./builders/footer.js";
 
 const title = "大分県コロナ情報取得ページ（姫島・国東・杵築版）";
 
@@ -17,6 +18,7 @@ $(() => {
     "himeshima" : "data/himeshima.json",
     "kunisaki" : "data/kunisaki.json",
     "kitsuki" : "data/kitsuki.json",
+    "updated" : "data/update.json",
   });
   document.title = title;
   
@@ -47,5 +49,8 @@ $(() => {
 
   const naviBar = new covidNaviBar.CovidNaviBar(contentChanger);
   naviBar.refreshView($("#naviBar"));
+
+  const footer = new covidFooter.CovidFooter(data);
+  footer.refreshView($("#pageFooter"));
 });
 
