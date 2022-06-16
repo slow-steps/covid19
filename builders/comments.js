@@ -1,20 +1,14 @@
 import { Grid, html } from "../common/gridjs/gridjs.module.js"
 import Enumerable from "../common/linq/linq.min.js";
+import { TableBuilder } from "./tablebuilder.js";
 import * as covidDate from "./coviddatetime.js";
 
-export class OitaComments {
-  #covidData;
+export class OitaComments extends TableBuilder{
   constructor(covidData) {
-    this.#covidData = covidData;
-  }
-  refreshView(region) {
-    region.empty();
-    this.#covidData.handleComments(comments => {
-      commentsTable(comments).render(region[0]);
-    });
+    super(x => covidData.handleComments(x), commentsGrid);
   }
 }
-function commentsTable(data) {
+function commentsGrid(data) {
   return new Grid({
     columns: [
       {
@@ -22,7 +16,8 @@ function commentsTable(data) {
         formatter : x => html(datetimeHtml(x)),
         attributes : {
           "style" : {
-            "min-width" : "110px"
+            "min-width" : "110px",
+            "text-align" : "center"
           },
         }
       },
