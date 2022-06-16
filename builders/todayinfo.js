@@ -75,7 +75,7 @@ function countMembers(infecteds, latestDate) {
   for (let infected of infecteds) {
     if (infected.releaseDate == dateCriteria) {
       oita++;
-      switch (infected.redidence) {
+      switch (infected.residence) {
         case "姫島村":
           himeshima++;
           break;

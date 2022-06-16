@@ -1,4 +1,5 @@
-import * as covidDate from "./coviddatetime.js";
+import { Grid, html } from "../common/gridjs/gridjs.module.js"
+import Enumerable from "../common/linq/linq.min.js";import * as covidDate from "./coviddatetime.js";
 
 export class OitaInfecteds {
   #covidData;
@@ -8,7 +9,7 @@ export class OitaInfecteds {
   refreshView(region) {
     region.empty();
     this.#covidData.handleInfecteds(infecteds => {
-      region.append(infectedsTable(infecteds));
+      infectedsTable(infecteds).render(region[0]);
     });
   }
 }
@@ -20,7 +21,7 @@ export class TakadaInfecteds {
   refreshView(region) {
     region.empty();
     this.#covidData.handleTakada(takada => {
-      region.append(infectedsTable(takada));
+      infectedsTable(takada).render(region[0]);
     });
   }  
 }
@@ -32,7 +33,7 @@ export class HimeshimaInfecteds {
   refreshView(region) {
     region.empty();
     this.#covidData.handleHimeshima(himeshima => {
-      region.append(infectedsTable(himeshima));
+      infectedsTable(himeshima).render(region[0]);
     });
   }  
 }
@@ -44,7 +45,7 @@ export class KunisakiInfecteds {
   refreshView(region) {
     region.empty();
     this.#covidData.handleKunisaki(kunisaki => {
-      region.append(infectedsTable(kunisaki));
+      infectedsTable(kunisaki).render(region[0]);
     });
   }  
 }
@@ -56,11 +57,23 @@ export class KitsukiInfecteds {
   refreshView(region) {
     region.empty();
     this.#covidData.handleKitsuki(kitsuki => {
-      region.append(infectedsTable(kitsuki));
+      infectedsTable(kitsuki).render(region[0]);
     });
   }  
 }
 function infectedsTable(data) {
+  return new Grid({
+    columns: ['名前', 'ジャンル', '素晴らしさ'],
+    data: [
+      ['Vue', 'Frontend Framework', '★★★★★'],
+      ['Vuetify', 'UI Framework', '★★★★★'],
+      ['React', 'Frontend Framework', '★★★★★'],
+      ['Gatsby', 'Static Site Genarator', '★★★★★'],
+      ['Grid', 'Great Table Library', '★★★★★']
+    ],
+  });
+}
+function infectedsTableOld(data) {
   const table = $("<table>")
     .append(
       $("<thead>").append(
