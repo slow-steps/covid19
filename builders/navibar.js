@@ -1,44 +1,44 @@
 export class CovidNaviBar {
-  #contentChanger;
-  constructor(contentChanger) {
-    this.#contentChanger = contentChanger;
+  #refreshers;
+  constructor(refreshers) {
+    this.#refreshers = refreshers;
   }
   refreshView(region) {
     region.empty();
     region.append(naviBar(
-      naviBarContents(this.#contentChanger)
+      naviBarContents(this.#refreshers)
     ));
   }
 }
-function naviBarContents(changer) {
+function naviBarContents(refreshers) {
   return [
     {
       "label" : "県コメント（1週間）",
-      "callback" : () => changer.showComments(),
+      "changeContent" : () => refreshers["comments"](),
     },
     {
       "label" : "県陽性者（1週間）",
-      "callback" : () => changer.showInfecteds(),
+      "changeContent" : () => refreshers["infecteds"](),
     },
     // {
     //   "label" : "髙田",
-    //   "callback" : () => changer.showTakada(),
+    //   "changeContent" : () => refreshers["takada"](),
     // },
     {
       "label" : "姫島",
-      "callback" : () => changer.showHimeshima(),
+      "changeContent" : () => refreshers["himeshima"](),
     },
     {
       "label" : "国東",
-      "callback" : () => changer.showKunisaki(),
+      "changeContent" : () => refreshers["kunisaki"](),
     },    
     {
       "label" : "杵築",
-      "callback" : () => changer.showKitsuki(),
+      "changeContent" : () => refreshers["kitsuki"](),
     },
     {
       "label" : "ダウンロード",
-      "callback" : () => changer.showDownload(),
+      "changeContent" : () => refreshers["download"](),
     }  
   ];
 }
@@ -51,7 +51,7 @@ function naviBar(settings) {
   for (let setting of settings) {
     bar.append(naviButton(
       setting["label"],
-      setting["callback"]
+      setting["changeContent"]
     ));
   }
   bar.append($("<div>", { css : { "clear" : "both" } }))
@@ -60,7 +60,7 @@ function naviBar(settings) {
 let buttonMap = {};
 const selectedButton = "btn-floating orange darken-1 child-module";
 const deselectedButton = "btn-floating orange lighten-3 orange-text text-darken-4 child-module";
-function naviButton(label, callback) {
+function naviButton(label, changeContent) {
   const button = $("<Button>", {
     "class" : deselectedButton,
     css : {
@@ -73,7 +73,7 @@ function naviButton(label, callback) {
   })
   .on("click", () =>
   {
-    callback();
+    changeContent();
     setIndicatorColor(label);
   }); 
   buttonMap[label] = button;

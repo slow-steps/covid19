@@ -1,5 +1,16 @@
+const commentsJson =  "data/comments7days.json";
+const infectedsJson = "data/infecteds7days.json";
+const takadaJson = "data/takada.json";
+const himeshimaJson = "data/himeshima.json";
+const kunisakiJson = "data/kunisaki.json";
+const kitsukiJson = "data/kitsuki.json";
+const updatedJson = "data/update.json";
+
+function uniqeUrl(url) {
+  return url + "?" + new Date().getTime();
+}
+
 export class CovidData {
-  #getUrl;
   #comments = null;
   #infecteds = null;
   #takada = null;
@@ -7,14 +18,11 @@ export class CovidData {
   #kunisaki = null;
   #kitsuki = null;
   #updatedTime = null;
-  constructor(jsonUrlDict) {
-    this.#getUrl = key => 
-      jsonUrlDict[key] + "?" + new Date().getTime();
-  }
+
   get commentsPromise() {
     return new Promise(resolve => {
       if (this.#comments == null) {
-        $.getJSON(this.#getUrl("comments"), data =>{
+        $.getJSON(uniqeUrl(commentsJson), data =>{
           data.reverse();
           this.#comments = data;
           resolve(this.#comments);
@@ -27,7 +35,7 @@ export class CovidData {
   get infectedsPromise() {
     return new Promise(resolve => {
       if (this.#infecteds == null) {
-        $.getJSON(this.#getUrl("infecteds"), data =>{
+        $.getJSON(uniqeUrl(infectedsJson), data =>{
           this.#infecteds = data;
           resolve(this.#infecteds);
         });
@@ -39,7 +47,7 @@ export class CovidData {
   get takadaPromise() {
     return new Promise(resolve => {
       if (this.#takada == null) {
-        $.getJSON(this.#getUrl("takada"), data =>{
+        $.getJSON(uniqeUrl(takadaJson), data =>{
           this.#takada = data;
           resolve(this.#takada);
         });
@@ -51,7 +59,7 @@ export class CovidData {
   get himeshimaPromise() {
     return new Promise(resolve => {
       if (this.#himeshima == null) {
-        $.getJSON(this.#getUrl("himeshima"), data =>{
+        $.getJSON(uniqeUrl(himeshimaJson), data =>{
           this.#himeshima = data;
           resolve(this.#himeshima);
         });
@@ -62,7 +70,7 @@ export class CovidData {
   }  get kunisakiPromise() {
     return new Promise(resolve => {
       if (this.#kunisaki == null) {
-        $.getJSON(this.#getUrl("kunisaki"), data =>{
+        $.getJSON(uniqeUrl(kunisakiJson), data =>{
           this.#kunisaki = data;
           resolve(this.#kunisaki);
         });
@@ -74,7 +82,7 @@ export class CovidData {
   get kitsukiPromise() {
     return new Promise(resolve => {
       if (this.#kitsuki == null) {
-        $.getJSON(this.#getUrl("kitsuki"), data =>{
+        $.getJSON(uniqeUrl(kitsukiJson), data =>{
           this.#kitsuki = data;
           resolve(this.#kitsuki);
         });
@@ -86,7 +94,7 @@ export class CovidData {
   get updatedTimePromise() {
     return new Promise(resolve => {
       if (this.#kitsuki == null) {
-        $.getJSON(this.#getUrl("updated"), data =>{
+        $.getJSON(uniqeUrl(updatedJson), data =>{
           this.#updatedTime = data["updated"];
           resolve(this.#updatedTime);
         });

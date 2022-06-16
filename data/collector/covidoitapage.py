@@ -15,7 +15,7 @@ COMMENT_FINDER = r"<h2>ＰＣＲ等検査実施結果[^<]+</h2><div[^>]+>(.*?)</
 LIST_LINK_FINDER = r'<a href="([^"]+)">陽性者一覧についてはこちらからご覧ください。\s*</a>'
 
 class CovidOitaPage:
-    """ 大分県コロナぺページ """
+    """ 大分県コロナページ """
     _html = ""
     _release_datetime = None
     _comment = ""

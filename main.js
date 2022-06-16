@@ -4,22 +4,13 @@ import * as covidTodayInfo from "./builders/todayinfo.js";
 import * as oitaComments from "./builders/comments.js";
 import * as covidInfecteds from "./builders/infecteds.js";
 import * as covidDownload from "./builders/download.js";
-import * as covidContentChanger from "./builders/conentchanger.js";
 import * as covidNaviBar from "./builders/navibar.js";
 import * as covidFooter from "./builders/footer.js";
 
 const title = "大分県コロナ情報取得ページ（姫島・国東・杵築版）";
 
 $(() => {
-  const data = new covidData.CovidData({
-    "comments" : "data/comments7days.json",
-    "infecteds" : "data/infecteds7days.json",
-    "takada" : "data/takada.json",
-    "himeshima" : "data/himeshima.json",
-    "kunisaki" : "data/kunisaki.json",
-    "kitsuki" : "data/kitsuki.json",
-    "updated" : "data/update.json",
-  });
+  const data = new covidData.CovidData();
   document.title = title;
   
   const topTitle = new covidTopTitle.CovidTopTitle(title);
@@ -38,16 +29,15 @@ $(() => {
 
   const contentRegion = $("#pageContent");
 
-  const contentChanger = new covidContentChanger.CovidContentChanger(
-    () => comments.refreshView(contentRegion), 
-    () => infecteds.refreshView(contentRegion),
-    () => takada.refreshView(contentRegion),
-    () => himeshima.refreshView(contentRegion),
-    () => kunisaki.refreshView(contentRegion),
-    () => kitsuki.refreshView(contentRegion),
-    () => download.refreshView(contentRegion));
-
-  const naviBar = new covidNaviBar.CovidNaviBar(contentChanger);
+  const naviBar = new covidNaviBar.CovidNaviBar({
+    "comments" : () => comments.refreshView(contentRegion), 
+    "infecteds" : () => infecteds.refreshView(contentRegion),
+    "takada" : () => takada.refreshView(contentRegion),
+    "himeshima" : () => himeshima.refreshView(contentRegion),
+    "kunisaki" : () => kunisaki.refreshView(contentRegion),
+    "kitsuki" : () => kitsuki.refreshView(contentRegion),
+    "download" : () => download.refreshView(contentRegion),   
+  });
   naviBar.refreshView($("#naviBar"));
 
   const footer = new covidFooter.CovidFooter(data);
