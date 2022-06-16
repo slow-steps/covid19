@@ -1,4 +1,6 @@
 cd %~dp0
 cd ..\..\
-git commit -a -m "daily update"
-git push --force
+git add -u *.csv
+git add -u *.json
+git commit -m "daily update"
+git push
