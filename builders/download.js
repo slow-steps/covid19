@@ -23,7 +23,11 @@ function downloadList() {
     .append(linkItem(
       "陽性者一覧のCSV（県発表全陽性者：令和2年3月3日以降）",
       "./data/infecteds.csv",
-      "陽性者一覧.csv"));
+      "陽性者一覧.csv"))
+    .append(linkItem(
+      "エクセルファイル（データは Web から取得）",
+      "./data/covidexcel.xlsx",
+      "大分県コロナ発表（Webソース）.xlsx"));
 }
 function linkItem(text, path, name) {
   return $("<li>", {
