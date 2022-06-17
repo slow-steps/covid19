@@ -76,7 +76,7 @@ def collect_comment(oita_page):
     yield "コメントのリストに最新コメントを追加しました。"
 
     comments_df.to_csv(COMMENTS_CSV_PATH, index=False, encoding="utf_8_sig")
-    yield "コメントのリストをCSVに保存しました。"
+    yield "コメントのリストのCSVを保存しました。"
 
     comments7days_df = commentsdf.select_last7days_comments(comments_df)
     save_df_as_json(
@@ -84,7 +84,7 @@ def collect_comment(oita_page):
         df=comments7days_df,
         rename_columns=COMMENTS_RENAME_COLUMNS,
         date_column_index=0)
-    yield "コメントのリスト（7日分）をJSONに保存しました。"
+    yield "コメントのリスト（7日分）のJSONを保存しました。"
 
 def collect_infecteds():
     yield "陽性者リストのデータを読み取ります..."
@@ -94,7 +94,7 @@ def collect_infecteds():
     yield "陽性者リストをデータとして読み込みました。"
 
     infecteds_df.to_csv(INFECTEDS_CSV_PATH, index=False, encoding="utf_8_sig")
-    yield "陽性者リストをCSVに保存しました。"
+    yield "陽性者リストのCSVを保存しました。"
 
     infected7days_df = infectedsdf.select_last7days_infecteds(infecteds_df)
     save_df_as_json(
@@ -102,23 +102,23 @@ def collect_infecteds():
         df=infected7days_df,
         rename_columns=INFECTEDS_RENAME_COLULMNS
     )
-    yield "陽性者リスト（7日分）をJSONに保存しました。"
+    yield "陽性者リスト（7日分）のJSONを保存しました。"
 
     takada_df = infectedsdf.select_takada_infecteds(infecteds_df)
     save_local_df_as_json(TAKADA_JSON_PATH,takada_df)
-    yield "陽性者リスト（髙田）をJSONに保存しました。"
+    yield "陽性者リスト（髙田）のJSONを保存しました。"
 
     himeshima_df = infectedsdf.select_himeshima_infecteds(infecteds_df)
     save_local_df_as_json(HIMESHIMA_JSON_PATH, himeshima_df)
-    yield "陽性者リスト（姫島）をJSONに保存しました。"
+    yield "陽性者リスト（姫島）のJSONを保存しました。"
 
     kunisaki_df = infectedsdf.select_kunisaki_infecteds(infecteds_df)
     save_local_df_as_json(KUNISAKI_JSON_PATH, kunisaki_df)
-    yield "陽性者リスト（国東）をJSONに保存しました。"
+    yield "陽性者リスト（国東）のJSONを保存しました。"
 
     kitsuki_df = infectedsdf.select_kitsuki_infecteds(infecteds_df)
     save_local_df_as_json(KITSUKI_JSON_PATH, kitsuki_df)
-    yield "陽性者リスト（杵築）をJSONに保存しました。"
+    yield "陽性者リスト（杵築）のJSONを保存しました。"
 
 def save_update_time():
     """ write update time to json """
