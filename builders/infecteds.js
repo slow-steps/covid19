@@ -19,6 +19,7 @@ export class HimeshimaInfecteds extends TableBuilder {
     super(x => covidData.himeshimaPromise.then(x), infectesGrid);
   }
 }
+
 export class KunisakiInfecteds extends TableBuilder {
   constructor(covidData) {
     super(x => covidData.kunisakiPromise.then(x), infectesGrid);

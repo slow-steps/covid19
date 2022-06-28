@@ -1,6 +1,6 @@
 """ collect covid19 oita data """
 
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 import requests
 import json
@@ -8,6 +8,7 @@ import json
 from covidoitapage import CovidOitaPage
 import commentsdf
 import infectedsdf
+import covidinfo
 import releasemark
 
 DATA_DIRECTORY = Path(__file__).parent.parent
@@ -19,6 +20,7 @@ INFECTEDS_CSV_PATH = get_path("infecteds.csv")
 
 COMMENTS_7DAYS_JSON_PATH = get_path("comments7days.json")
 INFECTEDS_7DAYS_JSON_PATH = get_path("infecteds7days.json")
+INFO_7DAYS_JSON_PATH = get_path("info7days.json")
 TAKADA_JSON_PATH = get_path("takada.json")
 HIMESHIMA_JSON_PATH = get_path("himeshima.json")
 KUNISAKI_JSON_PATH = get_path("kunisaki.json")
@@ -59,66 +61,58 @@ def save_df_as_json(json_path, df, rename_columns, date_column_index = -1):
         orient="records", 
         date_format="iso")
 
-def save_local_df_as_json(json_path, df):
-    """ local df to json """
+def save_infecteds_df_as_json(json_path, df):
+    """ infecteds df to json """
     save_df_as_json(
         json_path=json_path,
         df=df,
         rename_columns=INFECTEDS_RENAME_COLULMNS
     )
- 
-def collect_comment(oita_page):
-    comments_df = commentsdf.make_latest_comments_table(
-        csv_path=COMMENTS_CSV_PATH,
-        comment_datetime=oita_page.release_datetime,
-        comment_text=oita_page.comment
-    )
-    yield "コメントのリストに最新コメントを追加しました。"
 
-    comments_df.to_csv(COMMENTS_CSV_PATH, index=False, encoding="utf_8_sig")
+def save_comments(covid_comments):
+    covid_comments.all.to_csv(COMMENTS_CSV_PATH, index=False, encoding="utf_8_sig")
     yield "コメントのリストのCSVを保存しました。"
 
-    comments7days_df = commentsdf.select_last7days_comments(comments_df)
     save_df_as_json(
         json_path=COMMENTS_7DAYS_JSON_PATH,
-        df=comments7days_df,
+        df=covid_comments.last7days,
         rename_columns=COMMENTS_RENAME_COLUMNS,
         date_column_index=0)
     yield "コメントのリスト（7日分）のJSONを保存しました。"
 
-def collect_infecteds():
-    yield "陽性者リストのデータを読み取ります..."
-    infecteds_df = infectedsdf.get_table_in_pdf(
-        pdf_path= INFECTEDS_PDF_PATH
-    )
-    yield "陽性者リストをデータとして読み込みました。"
-
-    infecteds_df.to_csv(INFECTEDS_CSV_PATH, index=False, encoding="utf_8_sig")
+def save_infecteds(covid_infecteds):
+    covid_infecteds.all.to_csv(INFECTEDS_CSV_PATH, index=False, encoding="utf_8_sig")
     yield "陽性者リストのCSVを保存しました。"
 
-    infected7days_df = infectedsdf.select_last7days_infecteds(infecteds_df)
-    save_df_as_json(
-        json_path=INFECTEDS_7DAYS_JSON_PATH,
-        df=infected7days_df,
-        rename_columns=INFECTEDS_RENAME_COLULMNS
-    )
+    save_infecteds_df_as_json(INFECTEDS_7DAYS_JSON_PATH, covid_infecteds.last7days)
     yield "陽性者リスト（7日分）のJSONを保存しました。"
 
-    takada_df = infectedsdf.select_takada_infecteds(infecteds_df)
-    save_local_df_as_json(TAKADA_JSON_PATH,takada_df)
+    save_infecteds_df_as_json(TAKADA_JSON_PATH, covid_infecteds.takada)
     yield "陽性者リスト（髙田）のJSONを保存しました。"
 
-    himeshima_df = infectedsdf.select_himeshima_infecteds(infecteds_df)
-    save_local_df_as_json(HIMESHIMA_JSON_PATH, himeshima_df)
+    save_infecteds_df_as_json(HIMESHIMA_JSON_PATH, covid_infecteds.himeshima)
     yield "陽性者リスト（姫島）のJSONを保存しました。"
 
-    kunisaki_df = infectedsdf.select_kunisaki_infecteds(infecteds_df)
-    save_local_df_as_json(KUNISAKI_JSON_PATH, kunisaki_df)
+    save_infecteds_df_as_json(KUNISAKI_JSON_PATH, covid_infecteds.kunisaki)
     yield "陽性者リスト（国東）のJSONを保存しました。"
 
-    kitsuki_df = infectedsdf.select_kitsuki_infecteds(infecteds_df)
-    save_local_df_as_json(KITSUKI_JSON_PATH, kitsuki_df)
+    save_infecteds_df_as_json(KITSUKI_JSON_PATH, covid_infecteds.kitsuki)
     yield "陽性者リスト（杵築）のJSONを保存しました。"
+
+def save_top_infos(comments_df, infecteds_df):
+    """ save top infos """
+    infos = []
+    for index, comment in comments_df.iterrows():
+        release_datetime = comment["更新日時"]
+        info_date = date(release_datetime.year, release_datetime.month, release_datetime.day)
+        infecteds = infecteds_df.query(
+            "公表日 == @info_date",
+            engine="numexpr"
+        )
+        covid_info = covidinfo.get_covid_info(comment, infecteds)
+        infos.append(covid_info)
+    with open(INFO_7DAYS_JSON_PATH, "w") as info_json:
+        json.dump(infos, info_json)
 
 def save_update_time():
     """ write update time to json """
@@ -135,7 +129,14 @@ def collect_new_data_with_report():
         yield "Webページが更新されていませんでした。"
         return
 
-    for comment_report in collect_comment(oita_page):
+    covid_comments = commentsdf.CovidComments(
+        csv_path=COMMENTS_CSV_PATH,
+        comment_datetime=oita_page.release_datetime,
+        comment_text=oita_page.comment
+    )
+    yield "コメントのリストに最新コメントを追加しました。"
+    
+    for comment_report in save_comments(covid_comments):
         yield comment_report
     yield "コメントの保存が完了しました。"
 
@@ -146,9 +147,16 @@ def collect_new_data_with_report():
     )
     yield "陽性者リストのPDFをダウンロードしました。"
 
-    for infecteds_report in collect_infecteds():
+    yield "陽性者リストのデータを読み取ります..."
+    covid_infecteds = infectedsdf.CovidInfecteds(pdf_path=INFECTEDS_PDF_PATH)
+    yield "陽性者リストをデータとして読み込みました。"
+    
+    for infecteds_report in save_infecteds(covid_infecteds):
         yield infecteds_report
     yield "陽性者リストの保存が完了しました。"
+
+    save_top_infos(covid_comments.last7days, covid_infecteds.last7days)
+    yield "トップ情報（7日分）の保存が完了しました。"
 
     releasemark.update_mark(oita_page.release_datetime)
 

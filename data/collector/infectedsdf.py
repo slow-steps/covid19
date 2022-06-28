@@ -1,5 +1,6 @@
 """ infeceds dataframe maker """
 
+from copyreg import constructor
 import datetime
 import re
 from pathlib import Path
@@ -53,23 +54,6 @@ def get_table_in_pdf(pdf_path):
     fix_release_date(table)
     return table
 
-def select_takada_infecteds(infecteds_df):
-    return infecteds_df.query(
-        "居住地 == '豊後高田市'"
-    )
-def select_himeshima_infecteds(infecteds_df):
-    return infecteds_df.query(
-        "居住地 == '姫島村'"
-    )
-def select_kunisaki_infecteds(infecteds_df):
-    return infecteds_df.query(
-        "居住地 == '国東市'"
-    )
-def select_kitsuki_infecteds(infecteds_df):
-    return infecteds_df.query(
-        "居住地 == '杵築市'"
-    )
-
 def select_last7days_infecteds(infecteds_df):
     begin_date = datetime.date.today() - datetime.timedelta(days=7)
     return infecteds_df.query(
@@ -77,14 +61,28 @@ def select_last7days_infecteds(infecteds_df):
         engine="numexpr"
     )
 
-def _test():
-    df = get_table_in_pdf(Path(__file__).parent.parent.joinpath("infecteds.pdf"))
-    print(df)
-    kunisaki_df = select_kunisaki_infecteds(df)
-    print(kunisaki_df)
-    last7_df = select_last7days_infecteds(df)
+def get_infececteds_one_date(infecteds_df, target_date):
+    return infecteds_df.query(
+        "公表日 == @target_date",
+        engine="numexpr"
+    )
+def select_local(infecteds_df, area_name):
+       return infecteds_df.query(f"居住地 == '{area_name}'")
+   
+class CovidInfecteds:
+    def __init__(self, pdf_path):
+        self.all = get_table_in_pdf(pdf_path)
+        self.last7days = select_last7days_infecteds(self.all)
+        self.takada = select_local(self.all, "豊後高田市")
+        self.himeshima = select_local(self.all, "姫島村")
+        self.kunisaki = select_local(self.all, "国東市")
+        self.kitsuki = select_local(self.all, "杵築市")
 
-    print(last7_df)
+def _test():
+    covid_infecteds = CovidInfecteds(Path(__file__).parent.parent.joinpath("infecteds.pdf"))
+    print(covid_infecteds.all)
+    print(covid_infecteds.last7days)
+    print(covid_infecteds.kunisaki)
 
 if __name__ == "__main__":
     _test()

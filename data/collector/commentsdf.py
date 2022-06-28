@@ -29,15 +29,19 @@ def select_last7days_comments(comments_df):
         engine="numexpr"
     )
 
+class CovidComments:
+    def __init__(self, csv_path, comment_datetime, comment_text):
+        self.all = make_latest_comments_table(csv_path, comment_datetime, comment_text)
+        self.last7days = select_last7days_comments(self.all)
+
 def _test():
-    df = make_latest_comments_table(
+    comments = CovidComments(
         csv_path= None,
         comment_datetime=datetime.datetime.now(),
         comment_text="test comment."
     )
-    print(df)
-    last7_df = select_last7days_comments(df)
-    print(last7_df)
+    print(comments.all)
+    print(comments.last7days)
 
 if __name__ == "__main__":
     _test()
