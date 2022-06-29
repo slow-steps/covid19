@@ -13,7 +13,7 @@ def get_local_count(df, area_name):
     bool_series = (series == area_name)
     return int(bool_series.sum())
 
-def get_covid_info(comment_record, infecteds_df):
+def get_covid_summary(comment_record, infecteds_df):
     return {
         "date" : infecteds_df.iloc[0]["公表日"].isoformat(),
         "comment" : get_1st_paragraph(comment_record["コメント"]),

@@ -8,7 +8,7 @@ import json
 from covidoitapage import CovidOitaPage
 import commentsdf
 import infectedsdf
-import covidinfo
+import covidsummary
 import releasemark
 
 DATA_DIRECTORY = Path(__file__).parent.parent
@@ -20,7 +20,7 @@ INFECTEDS_CSV_PATH = get_path("infecteds.csv")
 
 COMMENTS_7DAYS_JSON_PATH = get_path("comments7days.json")
 INFECTEDS_7DAYS_JSON_PATH = get_path("infecteds7days.json")
-INFO_7DAYS_JSON_PATH = get_path("info7days.json")
+SUMMARIES_7DAYS_JSON_PATH = get_path("summaries7days.json")
 TAKADA_JSON_PATH = get_path("takada.json")
 HIMESHIMA_JSON_PATH = get_path("himeshima.json")
 KUNISAKI_JSON_PATH = get_path("kunisaki.json")
@@ -99,9 +99,9 @@ def save_infecteds(covid_infecteds):
     save_infecteds_df_as_json(KITSUKI_JSON_PATH, covid_infecteds.kitsuki)
     yield "陽性者リスト（杵築）のJSONを保存しました。"
 
-def save_top_infos(comments_df, infecteds_df):
+def save_summaries(comments_df, infecteds_df):
     """ save top infos """
-    infos = []
+    summaries = []
     for index, comment in comments_df.iterrows():
         release_datetime = comment["更新日時"]
         info_date = date(release_datetime.year, release_datetime.month, release_datetime.day)
@@ -109,10 +109,10 @@ def save_top_infos(comments_df, infecteds_df):
             "公表日 == @info_date",
             engine="numexpr"
         )
-        covid_info = covidinfo.get_covid_info(comment, infecteds)
-        infos.append(covid_info)
-    with open(INFO_7DAYS_JSON_PATH, "w") as info_json:
-        json.dump(infos, info_json)
+        covid_info = covidsummary.get_covid_summary(comment, infecteds)
+        summaries.append(covid_info)
+    with open(SUMMARIES_7DAYS_JSON_PATH, "w") as info_json:
+        json.dump(summaries, info_json)
 
 def save_update_time():
     """ write update time to json """
@@ -155,7 +155,7 @@ def collect_new_data_with_report():
         yield infecteds_report
     yield "陽性者リストの保存が完了しました。"
 
-    save_top_infos(covid_comments.last7days, covid_infecteds.last7days)
+    save_summaries(covid_comments.last7days, covid_infecteds.last7days)
     yield "トップ情報（7日分）の保存が完了しました。"
 
     releasemark.update_mark(oita_page.release_datetime)
