@@ -16,14 +16,14 @@ function titleBar(title) {
     })
     .css({
       "margin" : "0px",
-      "padding" : "10px 16px",
+      "padding" : "10px 10px",
       "border-radius" : "4px",
     })
     .text(title);
 }
 function sourceLink() {
   return $("<div>", {
-    "class" : "grey-text text-darken-1",
+    "class" : "grey-text text-darken-3",
     css : {
       "margin-top" : "5px",
       "text-align" : "right",
@@ -37,8 +37,8 @@ function sourceLink() {
     .append(
       $("<span>", {
         css : {
-          "font-size" : "x-small",
+          "font-size" : "smaller",
         },
-        text : " より",
+        text : " から取得した情報を表示します。",
       }));
 }

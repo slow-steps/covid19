@@ -20,10 +20,10 @@ function naviBarContents(refreshers) {
       "label" : "県陽性者（1週間）",
       "changeContent" : () => refreshers["infecteds"](),
     },
-    // {
-    //   "label" : "髙田",
-    //   "changeContent" : () => refreshers["takada"](),
-    // },
+    {
+      "label" : "髙田",
+      "changeContent" : () => refreshers["takada"](),
+    },
     {
       "label" : "姫島",
       "changeContent" : () => refreshers["himeshima"](),
@@ -66,7 +66,7 @@ function naviButton(label, changeContent) {
     css : {
       "float" : "left",
       "width" : "auto",
-      "margin" : "4px 10px",
+      "margin" : "4px 6px",
       "padding" : "0px 10px",
     },
     text : label,

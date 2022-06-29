@@ -1,3 +1,4 @@
+const summariesJson = "data/summaries7days.json";
 const commentsJson =  "data/comments7days.json";
 const infectedsJson = "data/infecteds7days.json";
 const takadaJson = "data/takada.json";
@@ -11,6 +12,7 @@ function uniqeUrl(url) {
 }
 
 export class CovidData {
+  #summaries = null;
   #comments = null;
   #infecteds = null;
   #takada = null;
@@ -19,6 +21,18 @@ export class CovidData {
   #kitsuki = null;
   #updatedTime = null;
 
+  get summariesPromise() {
+    return new Promise(resolve => {
+      if (this.#summaries == null) {
+        $.getJSON(uniqeUrl(summariesJson), data =>{
+          this.#summaries = data;
+          resolve(this.#summaries);
+        })
+      } else {
+        resolve(this.#summaries);
+      }
+    });  
+  }
   get commentsPromise() {
     return new Promise(resolve => {
       if (this.#comments == null) {
