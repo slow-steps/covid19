@@ -17,6 +17,7 @@ def get_covid_summary(comment_record, infecteds_df):
     return {
         "date" : infecteds_df.iloc[0]["公表日"].isoformat(),
         "comment" : get_1st_paragraph(comment_record["コメント"]),
+        "oita" : len(infecteds_df),
         "takada" : get_local_count(infecteds_df, "豊後高田市"),
         "himeshima" : get_local_count(infecteds_df, "姫島村"),
         "kunisaki" : get_local_count(infecteds_df, "国東市"),
