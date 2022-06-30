@@ -25,7 +25,7 @@ function downloadList() {
       "./data/infecteds.csv",
       "陽性者一覧.csv"))
     .append(linkItem(
-      "エクセルファイル（データは Web から取得）",
+      "エクセルファイル（上記2つのCSVデータをクエリ機能で読み取ります）",
       "./data/covidexcel.xlsx",
       "大分県コロナ発表（Webソース）.xlsx"));
 }
