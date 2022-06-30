@@ -27,7 +27,7 @@ function downloadList() {
     .append(linkItem(
       "エクセルファイル（上記2つのCSVデータをクエリ機能で読み取ります）",
       "./data/covidexcel.xlsx",
-      "大分県コロナ発表（Webソース）.xlsx"));
+      "大分県コロナ情報.xlsx"));
 }
 function linkItem(text, path, name) {
   return $("<li>", {
