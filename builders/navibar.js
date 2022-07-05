@@ -21,7 +21,7 @@ function naviBarContents(refreshers) {
       "changeContent" : () => refreshers["infecteds"](),
     },
     {
-      "label" : "髙田",
+      "label" : "高田",
       "changeContent" : () => refreshers["takada"](),
     },
     {

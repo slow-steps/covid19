@@ -173,7 +173,7 @@ function countsIndicator(valueChangers, countMembers) {
         })
       )
       .append(countElement("県", valueChangers, countMembers["oita"]))
-      .append(countElement("髙田", valueChangers, countMembers["takada"]))
+      .append(countElement("高田", valueChangers, countMembers["takada"]))
       .append(countElement("姫島", valueChangers, countMembers["himeshima"]))
       .append(countElement("国東", valueChangers, countMembers["kunisaki"]))
       .append(countElement("杵築", valueChangers, countMembers["kitsuki"])))
