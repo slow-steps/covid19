@@ -22,13 +22,14 @@ export class CovidSummary {
       this.#currentIndex = this.#lastIndex;
       
       div
-        .append(commentTitle(
+        .append(summaryTitle(
           this.#valueChangers,
           () => new Date(this.#currentSummary()["date"]),
           () => this.#goPrev(),
           () => this.#goNext(),
           () => this.#isFirst(),
           () => this.#isLast()))
+        .append(commentTitle())
         .append(commentMain(
           this.#valueChangers, 
           () => this.#currentSummary()["comment"]))
@@ -75,9 +76,11 @@ export class CovidSummary {
     }
   }
 }
-function commentTitle(valueChangers, dateProvider, goPrev, goNext, isFirst, isLast) {
+function summaryTitle(valueChangers, dateProvider, goPrev, goNext, isFirst, isLast) {
   const buttonClass = "btn-flat orange-text text-darken-4";
+  
   const divBase = $("<div>");
+  
   const prevDiv = $("<button>", {
     "class" : buttonClass,
     css :{
@@ -87,25 +90,25 @@ function commentTitle(valueChangers, dateProvider, goPrev, goNext, isFirst, isLa
   })
   .appendTo(divBase);
 
-  const summaryTitle = $("<div>", {
+  const title = $("<div>", {
     "class" : "orange-text text-darken-3",
     css : {
       "float" : "left",
       "margin" : "0px",
       "padding" : "3px",
-      "font-size" : "larger",
-      // "font-weight" : "bold",
+      "font-size" : "large",
+      "font-weight" : "bold",
     },
   })
   .appendTo(divBase);
 
-  valueChangers.push(() => summaryTitle.text(
-    `県コメント（${covidDateTime.getDateKanji(dateProvider())}発表）冒頭部`))
+  valueChangers.push(() => title.text(
+    `${covidDateTime.getDateKanji(dateProvider())} の概況`))
 
   const nextDiv = $("<button>", {
     "class" : buttonClass,
     css :{
-      "float" : "right",
+      // "float" : "right",
     },
     text : "▶",
     disabled : "true",
@@ -137,10 +140,20 @@ function commentTitle(valueChangers, dateProvider, goPrev, goNext, isFirst, isLa
 
   return divBase;
 }
+function commentTitle() {
+  return $("<div>", {
+    "class" : "orange-text text-darken-3",
+    css: {
+      "margin" : "0px 5px",
+    },
+    text: "大分県コメント冒頭部",
+  });
+}
 function commentMain(valueChangers, textProvider) {
   const divBase = $("<div>", {
       "class" : "white child-module",
     });
+  
   const textDiv = $("<p>", {
       css : {
         "margin" : "5px",
