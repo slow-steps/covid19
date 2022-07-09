@@ -8,4 +8,10 @@
   <changefreq>daily</changefreq>
 </url>
 
+<url>
+  <loc>http://slow-steps.github.io/covid19/</loc>
+  <priority>1.0</priority>
+  <changefreq>daily</changefreq>
+</url>
+
 </urlset>
