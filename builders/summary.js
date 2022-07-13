@@ -152,16 +152,22 @@ function commentTitle() {
 function commentMain(valueChangers, textProvider) {
   const divBase = $("<div>", {
       "class" : "white child-module",
+
     });
   
-  const textDiv = $("<p>", {
-      css : {
-        "margin" : "5px",
-      },
-    })
-    .appendTo(divBase);
-  
-  valueChangers.push(() => textDiv.text(textProvider()));
+  valueChangers.push(() => {
+    divBase.empty();
+    const textDiv = $("<div>");
+    for (let paragraph of textProvider().split(/\n/)) {
+      textDiv.append($("<p>", {
+        text : paragraph,
+        css : {
+          "margin" : "8px",
+        },
+      }))
+    }
+    divBase.append(textDiv);
+  });
 
   return divBase;
 }

@@ -5,8 +5,29 @@ import re
 
 FIRST_PARAGRAPH_FINDER = re.compile(r"[^\r\n]+")
 
+REGULAR_COMMENT_BEGINS = "|".join([
+        "家庭内感染が続いています。",
+        "職場内での感染が増えています。",
+        "会食での感染が増えています。",
+        "マスクについては、熱中症が心配される",
+        "オミクロン株の亜種であっても、",
+        "特に、ワクチン接種率が低い若い世代の感染",
+        "県営接種センターでは、",
+        "なお、大分市民の方は、",
+        "マスク着用の取り扱いについては",
+        "中和抗体薬や経口薬など早期の治療",
+        "感染が急速に拡大しています。",
+        r"\s",
+    ])
+
+INDEPENDENT_COMMENT_FINDER = re.compile(rf"^(?!({REGULAR_COMMENT_BEGINS}))[^\r\n]+", re.MULTILINE)
+
 def get_1st_paragraph(text):
     return FIRST_PARAGRAPH_FINDER.match(text).group(0)
+
+def get_independent_comment(text):
+    independents = INDEPENDENT_COMMENT_FINDER.finditer(text)
+    return "\n".join([x.group(0) for x in independents])
 
 def get_local_count(df, area_name):
     series = df["居住地"]
@@ -16,7 +37,7 @@ def get_local_count(df, area_name):
 def get_covid_summary(comment_record, infecteds_df):
     return {
         "date" : infecteds_df.iloc[0]["公表日"].isoformat(),
-        "comment" : get_1st_paragraph(comment_record["コメント"]),
+        "comment" : get_independent_comment(comment_record["コメント"]),
         "oita" : len(infecteds_df),
         "takada" : get_local_count(infecteds_df, "豊後高田市"),
         "himeshima" : get_local_count(infecteds_df, "姫島村"),
@@ -24,3 +45,8 @@ def get_covid_summary(comment_record, infecteds_df):
         "kitsuki" : get_local_count(infecteds_df, "杵築市"),     
     }
 
+def test():
+    print(REGULAR_COMMENT_BEGINS)    
+
+if __name__ == "__main__":
+    test()
