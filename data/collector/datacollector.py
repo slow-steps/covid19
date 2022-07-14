@@ -26,6 +26,7 @@ HIMESHIMA_JSON_PATH = get_path("himeshima.json")
 KUNISAKI_JSON_PATH = get_path("kunisaki.json")
 KITSUKI_JSON_PATH = get_path("kitsuki.json")
 UPDATE_JSON_PATH = get_path("update.json")
+SUMMARY_FOLDER_PATH = get_path("summaries")
 
 INFECTEDS_PDF_PATH = get_path("infecteds.pdf")
 
@@ -101,18 +102,9 @@ def save_infecteds(covid_infecteds):
 
 def save_summaries(comments_df, infecteds_df):
     """ save top infos """
-    summaries = []
-    for index, comment in comments_df.iterrows():
-        release_datetime = comment["更新日時"]
-        info_date = date(release_datetime.year, release_datetime.month, release_datetime.day)
-        infecteds = infecteds_df.query(
-            "公表日 == @info_date",
-            engine="numexpr"
-        )
-        covid_info = covidsummary.get_covid_summary(comment, infecteds)
-        summaries.append(covid_info)
+    summaries = covidsummary.generate_summaries(comments_df, infecteds_df)
     with open(SUMMARIES_7DAYS_JSON_PATH, "w") as info_json:
-        json.dump(summaries, info_json)
+        json.dump(list(summaries), info_json)
 
 def save_update_time():
     """ write update time to json """
@@ -131,8 +123,8 @@ def collect_new_data_with_report():
 
     covid_comments = commentsdf.CovidComments(
         csv_path=COMMENTS_CSV_PATH,
-        comment_datetime=oita_page.release_datetime,
-        comment_text=oita_page.comment
+        new_datetime=oita_page.release_datetime,
+        new_text=oita_page.comment
     )
     yield "コメントのリストに最新コメントを追加しました。"
     

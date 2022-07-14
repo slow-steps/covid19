@@ -2,6 +2,7 @@
 
 from cmath import inf
 import re
+from datetime import date
 
 FIRST_PARAGRAPH_FINDER = re.compile(r"[^\r\n]+")
 
@@ -45,6 +46,16 @@ def get_covid_summary(comment_record, infecteds_df):
         "kitsuki" : get_local_count(infecteds_df, "杵築市"),     
     }
 
+def generate_summaries(comments_df, infecteds_df):
+    for _, comment in comments_df.iterrows():
+        release_datetime = comment["更新日時"]
+        info_date = date(release_datetime.year, release_datetime.month, release_datetime.day)
+        infecteds = infecteds_df.query(
+            "公表日 == @info_date",
+            engine="numexpr"
+        )
+        yield get_covid_summary(comment, infecteds)  
+ 
 def test():
     print(REGULAR_COMMENT_BEGINS)    
 
