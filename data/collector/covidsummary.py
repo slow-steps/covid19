@@ -6,7 +6,7 @@ from datetime import date
 
 FIRST_PARAGRAPH_FINDER = re.compile(r"[^\r\n]+")
 
-REGULAR_COMMENT_BEGINS = "|".join([
+IGNORE_PARAGRAPHS = "|".join([
         "家庭内感染が続いています。",
         "職場内での感染が増えています。",
         "会食での感染が増えています。",
@@ -18,10 +18,11 @@ REGULAR_COMMENT_BEGINS = "|".join([
         "マスク着用の取り扱いについては",
         "中和抗体薬や経口薬など早期の治療",
         "感染が急速に拡大しています。",
+        "感染対策についてはこちらをご覧ください。",
         r"\s",
     ])
 
-INDEPENDENT_COMMENT_FINDER = re.compile(rf"^(?!({REGULAR_COMMENT_BEGINS}))[^\r\n]+", re.MULTILINE)
+INDEPENDENT_COMMENT_FINDER = re.compile(rf"^(?!({IGNORE_PARAGRAPHS}))[^\r\n]+", re.MULTILINE)
 
 def get_1st_paragraph(text):
     return FIRST_PARAGRAPH_FINDER.match(text).group(0)
@@ -57,7 +58,7 @@ def generate_summaries(comments_df, infecteds_df):
         yield get_covid_summary(info_date, comment, infecteds)  
  
 def test():
-    print(REGULAR_COMMENT_BEGINS)    
+    print(IGNORE_PARAGRAPHS)    
 
 if __name__ == "__main__":
     test()
