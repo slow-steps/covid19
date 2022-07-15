@@ -35,9 +35,9 @@ def get_local_count(df, area_name):
     bool_series = (series == area_name)
     return int(bool_series.sum())
 
-def get_covid_summary(comment_record, infecteds_df):
+def get_covid_summary(summary_date, comment_record, infecteds_df):
     return {
-        "date" : infecteds_df.iloc[0]["公表日"].isoformat(),
+        "date" : summary_date.isoformat(),
         "comment" : get_independent_comment(comment_record["コメント"]),
         "oita" : len(infecteds_df),
         "takada" : get_local_count(infecteds_df, "豊後高田市"),
@@ -54,7 +54,7 @@ def generate_summaries(comments_df, infecteds_df):
             "公表日 == @info_date",
             engine="numexpr"
         )
-        yield get_covid_summary(comment, infecteds)  
+        yield get_covid_summary(info_date, comment, infecteds)  
  
 def test():
     print(REGULAR_COMMENT_BEGINS)    
