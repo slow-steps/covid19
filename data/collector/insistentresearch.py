@@ -30,7 +30,7 @@ def main():
                 print("github の更新を取得します...")
                 subprocess.call(str(GIT_PULL), shell=True)
                 print("github の更新を取得しました。")
-                print("情報を取得します...")
+                print("大分県コロナ情報を取得します...")
                 for report in datacollector.collect_new_data_with_report():
                     print(report)
                 if releasemark.is_today_marked():
