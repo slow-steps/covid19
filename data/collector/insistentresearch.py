@@ -12,7 +12,9 @@ import datacollector
 INTERVAL_MINUTES = 5
 REMAIN_SECONDS = 10
 
-GIT_BATCH = Path(__file__).parent.joinpath("git.bat")
+CWD = Path(__file__).parent
+GIT_PULL = CWD.joinpath("gitpull.bat")
+GIT_PUSH = CWD.joinpath("gitpush.bat")
 
 def main():
     """ main """
@@ -25,12 +27,15 @@ def main():
                 print("本日の更新は取得済みです。")
                 break
             else:
+                print("github の更新を取得します...")
+                subprocess.call(str(GIT_PULL), shell=True)
+                print("github の更新を取得しました。")
                 print("情報を取得します...")
                 for report in datacollector.collect_new_data_with_report():
                     print(report)
                 if releasemark.is_today_marked():
                     print("github に更新をアップロードします...")
-                    subprocess.call(str(GIT_BATCH), shell=True)
+                    subprocess.call(str(GIT_PUSH), shell=True)
                     print("github の更新が完了しました。")
                     break
                 print(f"{INTERVAL_MINUTES}分 待機します...")
