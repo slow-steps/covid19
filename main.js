@@ -10,11 +10,12 @@ import * as covidFooter from "./builders/footer.js";
 const title = "大分県コロナ情報取得ページ（高田・姫島・国東・杵築版）";
 
 $(() => {
-  const data = new covidData.CovidData();
   document.title = title;
   
   const topTitle = new covidTopTitle.CovidTopTitle(title);
   topTitle.refreshView($("#topTitle"));
+  
+  const data = new covidData.CovidData();
   
   const summary = new covidSummary.CovidSummary(data);
   summary.refreshView($("#todayInfo"))
