@@ -28,7 +28,8 @@ KITSUKI_JSON_PATH = get_path("kitsuki.json")
 UPDATE_JSON_PATH = get_path("update.json")
 SUMMARY_FOLDER_PATH = get_path("summaries")
 
-INFECTEDS_PDF_PATH = get_path("infecteds.pdf")
+INFECTEDS1_6_PDF_PATH = get_path("infecteds1-6.pdf")
+INFECTEDS7_PDF_PATH = get_path("infecteds7.pdf")
 
 COMMENTS_RENAME_COLUMNS = {
     "更新日時" : "releaseDate",
@@ -134,13 +135,20 @@ def collect_new_data_with_report():
 
     yield "陽性者リストのPDFをダウンロードします..."
     download_pdf(
-        pdf_uri=oita_page.infecteds_list_link,
-        destination=INFECTEDS_PDF_PATH
+        pdf_uri=oita_page.infecteds_link_current,
+        destination=INFECTEDS7_PDF_PATH
+    )
+    download_pdf(
+        pdf_uri=oita_page.infecteds_link_last1,
+        destination=INFECTEDS1_6_PDF_PATH
     )
     yield "陽性者リストのPDFをダウンロードしました。"
 
     yield "陽性者リストのデータを読み取ります..."
-    covid_infecteds = infectedsdf.CovidInfecteds(pdf_path=INFECTEDS_PDF_PATH)
+    covid_infecteds = infectedsdf.CovidInfecteds(pdf_paths=[
+        INFECTEDS7_PDF_PATH,
+        INFECTEDS1_6_PDF_PATH
+    ])
     yield "陽性者リストをデータとして読み込みました。"
     
     for infecteds_report in save_infecteds(covid_infecteds):

@@ -5,6 +5,7 @@ import datetime
 import re
 from pathlib import Path
 import numpy as np
+import pandas as pd
 import tabula
 
 CSV_COLUMNS = [
@@ -68,10 +69,20 @@ def get_infececteds_one_date(infecteds_df, target_date):
     )
 def select_local(infecteds_df, area_name):
        return infecteds_df.query(f"居住地 == '{area_name}'")
-   
+
+def get_merged_table(pdf_paths):
+    df = None
+    for pdf_path in pdf_paths:
+        new_df = get_table_in_pdf(pdf_path)
+        if df is None:
+            df = new_df
+        else:
+            df = pd.concat([df, new_df])
+    return df
+
 class CovidInfecteds:
-    def __init__(self, pdf_path):
-        self.all = get_table_in_pdf(pdf_path)
+    def __init__(self, pdf_paths):
+        self.all = get_merged_table(pdf_paths)
         self.last7days = select_last7days_infecteds(self.all)
         self.takada = select_local(self.all, "豊後高田市")
         self.himeshima = select_local(self.all, "姫島村")

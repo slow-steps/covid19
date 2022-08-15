@@ -12,14 +12,16 @@ PAGE_SUB_URI = r"/site/covid19-oita/covid19-pcr.html"
 
 DATETIME_FINDER = r"<title>.+（R(\d+)\.(\d+)\.(\d+)　(\d+)時(\d+)分更新）"
 COMMENT_FINDER = r"<h2>ＰＣＲ等検査実施結果[^<]+</h2><div[^>]+>(.*?)</div>"
-LIST_LINK_FINDER = r'<a href="([^"]+)">陽性者一覧についてはこちらからご覧ください。\s*</a>'
+LIST_CURRENT_FINDER = r'<a href="([^"]+)">陽性者一覧（７波 R4\.7\.1～）についてはこちらからご覧ください。 \s*</a>'
+LIST_LAST1_FINDER = r'<a href="([^"]+)">１波から６波（R2\.3\.3～R4\.6\.30）についてはこちらからご覧ください。\s*</a>'
 
 class CovidOitaPage:
     """ 大分県コロナページ """
     _html = ""
     _release_datetime = None
     _comment = ""
-    _infecteds_list_link = ""
+    _infecteds_link_current = ""
+    _infecteds_link_last1 = ""
 
     def __init__(self):
         self._html = get_covidpage_html()
@@ -43,11 +45,18 @@ class CovidOitaPage:
         return self._comment
 
     @property
-    def infecteds_list_link(self):
+    def infecteds_link_current(self):
         """ return link of infecteds' list """
-        if self._infecteds_list_link == "":
-            self._infecteds_list_link = get_infecteds_list_link(self._html)
-        return self._infecteds_list_link
+        if self._infecteds_link_current == "":
+            self._infecteds_link_current = get_infecteds_link(self._html, LIST_CURRENT_FINDER)
+        return self._infecteds_link_current
+
+    @property
+    def infecteds_link_last1(self):
+        """ return link of infecteds' list """
+        if self._infecteds_link_last1 == "":
+            self._infecteds_link_last1 = get_infecteds_link(self._html, LIST_LAST1_FINDER)
+        return self._infecteds_link_last1
 
 def get_covidpage_html():
     """ return html of today's covid19 page """
@@ -75,9 +84,9 @@ def get_today_comment(html):
     comment = soup.text.strip()
     return comment
 
-def get_infecteds_list_link(html):
+def get_infecteds_link(html, finder):
     """ return infecteds list link """
-    found = re.search(LIST_LINK_FINDER, html)
+    found = re.search(finder, html)
     list_link = BASE_URI + found.group(1)
     return list_link
 
@@ -87,7 +96,7 @@ def test():
     print(page.html)
     print(page.release_datetime)
     print(page.comment)
-    print(page.infecteds_list_link)
+    print(page.infecteds_link_current)
 
 if __name__ == "__main__":
     test()
