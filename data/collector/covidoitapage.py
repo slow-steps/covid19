@@ -12,7 +12,7 @@ PAGE_SUB_URI = r"/site/covid19-oita/covid19-pcr.html"
 
 DATETIME_FINDER = r"<title>.+（R(\d+)\.(\d+)\.(\d+)　(\d+)時(\d+)分更新）"
 COMMENT_FINDER = r"<h2>ＰＣＲ等検査実施結果[^<]+</h2><div[^>]+>(.*?)</div>"
-LIST_CURRENT_FINDER = r'<a href="([^"]+)">陽性者一覧（７波 R4\.7\.1～）についてはこちらからご覧ください。 \s*</a>'
+LIST_CURRENT_FINDER = r'<a href="([^"]+)">陽性者一覧（７波 R4\.7\.1～）についてはこちらからご覧ください。\s*</a>'
 LIST_LAST1_FINDER = r'<a href="([^"]+)">１波から６波（R2\.3\.3～R4\.6\.30）についてはこちらからご覧ください。\s*</a>'
 
 class CovidOitaPage:
